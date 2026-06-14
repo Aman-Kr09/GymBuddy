@@ -1,0 +1,78 @@
+services:
+  # 1. Python ML Recommendation Service
+  - type: web
+    name: gymbuddy-ml
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    rootDir: ml-service
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # 2. Node Express Backend
+  - type: web
+    name: gymbuddy-server
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: server
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true  # Render will automatically generate a secure random secret key
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      
+      # MongoDB Connection
+      - key: MONGODB_URI
+        sync: false  # You will be prompted to enter this during deployment
+      
+      # Cloudinary Configuration
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      
+      # Nodemailer Email Configuration
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: GMAIL_RELAY_URL
+        sync: false
+
+      # Service URLs (automatically linked)
+      - key: ML_SERVICE_URL
+        fromService:
+          name: gymbuddy-ml
+          type: web
+          property: url
+      - key: CLIENT_URL
+        fromService:
+          name: gymbuddy-client
+          type: web
+          property: url
+
+  # 3. Next.js Frontend Client
+  - type: web
+    name: gymbuddy-client
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    rootDir: client
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: gymbuddy-server
+          type: web
+          property: url
