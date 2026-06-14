@@ -1,8 +1,10 @@
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+# pyrefly: ignore [missing-import]
 import uvicorn
 
 app = FastAPI(title="GymBuddy ML Recommendation Service", version="1.0.0")
