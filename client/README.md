@@ -1,3 +1,13 @@
+# 🏋️‍♂️ GymBuddy - Frontend Client
+
+This is the Next.js frontend client for GymBuddy.
+
+💻 **Live Site:** [https://gymbuddy-client-aman.onrender.com/](https://gymbuddy-client-aman.onrender.com/)
+
+👉 **Looking for the main repository README and setup guides?** Please check the root [README.md](../README.md).
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
