@@ -2,7 +2,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+let ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+if (ML_SERVICE_URL && !ML_SERVICE_URL.startsWith('http://') && !ML_SERVICE_URL.startsWith('https://')) {
+  ML_SERVICE_URL = `http://${ML_SERVICE_URL}`;
+}
 
 /**
  * Get gym recommendations from Python ML microservice

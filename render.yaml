@@ -1,7 +1,7 @@
 services:
   # 1. Python ML Recommendation Service
   - type: web
-    name: gymbuddy-ml
+    name: gymbuddy-ml-aman
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
@@ -12,7 +12,7 @@ services:
 
   # 2. Node Express Backend
   - type: web
-    name: gymbuddy-server
+    name: gymbuddy-server-aman
     env: node
     buildCommand: npm install
     startCommand: npm start
@@ -51,28 +51,25 @@ services:
       - key: GMAIL_RELAY_URL
         sync: false
 
-      # Service URLs (automatically linked)
+      # ML Service URL (Internal Private Networking)
       - key: ML_SERVICE_URL
         fromService:
-          name: gymbuddy-ml
+          name: gymbuddy-ml-aman
           type: web
-          property: url
+          property: hostport
+
+      # Client URL for CORS
       - key: CLIENT_URL
-        fromService:
-          name: gymbuddy-client
-          type: web
-          property: url
+        value: https://gymbuddy-client-aman.onrender.com
 
   # 3. Next.js Frontend Client
   - type: web
-    name: gymbuddy-client
+    name: gymbuddy-client-aman
     env: node
     buildCommand: npm install && npm run build
     startCommand: npm run start
     rootDir: client
     envVars:
+      # Backend URL for Client-side API calls
       - key: NEXT_PUBLIC_API_URL
-        fromService:
-          name: gymbuddy-server
-          type: web
-          property: url
+        value: https://gymbuddy-server-aman.onrender.com
